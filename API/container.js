@@ -1,56 +1,65 @@
-/* container.js */
-const { asClass, createContainer, asFunction, asValue } = require('awilix');
+const { asClass, createContainer, asFunction, asValue } = require("awilix");
 
 // app start
-const StartUp = require('./startup');
-const Server = require('./server');
-const config = require('../config/environments');
-//business
-const { UserBusiness } = require('../domain')
-// Routes
-const Routes = require('../API/routes');
-const UserRoutes = require('../API/routes/user.routes');
+const StartUp = require("./startup");
+const Server = require("./server");
+const config = require("../config/environments");
+
+// routes
+const Routes = require("../API/routes");
+const StudentRoutes = require("../api/routes/student.routes");
+const TeacherRoutes = require("../api/routes/teacher.routes");
+const CourseRoutes = require("../api/routes/course.routes");
+
+// business
+const { StudentBusiness, TeacherBusiness, CourseBusiness } = require("../domain/");
 
 // controllers
-const { UserController } = require('../API/controllers');
-
-//repositories
-const { UserRepository } = require('../dal/repositories');
+const { StudentController, TeacherController, CourseController } = require("../api/controllers");
 
 // services
-const { UserService } = require('../services');
+const { StudentService, TeacherService, CourseService } = require("../services");
 
-//db
-const db = require("../dal/entities")
+// repositories
+const { StudentRepository, TeacherRepository, CourseRepository } = require("../dal/repositories");
+
+// db
+const db = require("../dal/models");
 
 const container = createContainer();
 
 container
-    .register({
-        app: asClass(StartUp).singleton(),
-        router: asClass(Routes).singleton(),
-        server: asClass(Server).singleton(),
-        UserController: asClass(UserController).singleton(),
-        UserRoutes: asFunction(UserRoutes).singleton()
-    })
-    .register({
-        config: asValue(config)
-    })
-
-    .register({
-        db: asValue(db)
-    })
-
-    .register({
-        UserService: asClass(UserService).singleton()
-    })
-
-    .register({
-        UserRepository: asClass(UserRepository).singleton()
-    })
-
-    .register({
-        UserBusiness: asClass(UserBusiness).singleton()
-    })
+  .register({
+    app: asClass(StartUp).singleton(),
+    router: asFunction(Routes).singleton(),
+    server: asClass(Server).singleton(),
+    StudentController: asClass(StudentController).singleton(),
+    StudentRoutes: asFunction(StudentRoutes).singleton(),
+    TeacherController: asClass(TeacherController).singleton(),
+    TeacherRoutes: asFunction(TeacherRoutes).singleton(),
+    CourseController: asClass(CourseController).singleton(),
+    CourseRoutes: asFunction(CourseRoutes).singleton()
+  })
+  .register({
+    config: asValue(config)
+  })
+  .register({
+    db: asValue(db)
+  })
+  .register({
+    StudentService: asClass(StudentService).singleton(),
+    TeacherService: asClass(TeacherService).singleton(),
+    CourseService: asClass(CourseService).singleton()
+  })
+  .register({
+    StudentRepository: asClass(StudentRepository).singleton(),
+    TeacherRepository: asClass(TeacherRepository).singleton(),
+    CourseRepository: asClass(CourseRepository).singleton()
+  })
+  .register({
+    StudentBusiness: asClass(StudentBusiness).singleton(),
+    TeacherBusiness: asClass(TeacherBusiness).singleton(),
+    CourseBusiness: asClass(CourseBusiness).singleton()
+  });
 
 module.exports = container;
