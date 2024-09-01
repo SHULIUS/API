@@ -7,5 +7,6 @@ module.exports = {
          database: "school_dev",
          host: "localhost",
          dialect: "postgres",
+         logging: false
      } 
 }
